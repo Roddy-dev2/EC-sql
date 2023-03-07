@@ -28,37 +28,35 @@ GROUP BY e.manager_id;
 
 
 -- Exercise04: Determine who (if anyone) has two children from the dependents table.
-SELECT COUNT(e.employee_id) as totalDependents,
-        d.dependent_id
-FROM dependents d 
-INNER JOIN employees e ON d.employee_id = e.employee_id
-
+SELECT COUNT(d.employee_id) as totalDependents,
+        d.dependent_id,
+        e.first_name,
+        e.last_name
+FROM dependents AS d INNER JOIN employees AS e
+ON d.employee_id = e.employee_id
+GROUP BY d.dependent_id, e.first_name, e.last_name
 HAVING totalDependents > 1;
+-- this returns 0 rows and if you check by having totalDependents > 0 it works
 
-SELECT *, 
-        IS NULL(COUNT(e.employee_id), 0) AS 'Dependents'
-CROSS JOIN dependents d
-LEFT OUTER JOIN  employees e ON d.employee_id = e.employee_id
-GROUP BY e.employee_id, d.dependent_id;
-
-
-SELECT COUNT(employee_id) as totalDependents,
-        dependent_id
-FROM dependents
-GROUP BY dependent_id
-HAVING totalDependents > 0;
--- this returns 
-
-
--- cant get it
 
 
 
 -- Exercise05: Determine the amount of salary per department. Give a breakdown using only the department_id’s in the output along with the salary amounts.
-
+SELECT SUM(e.salary) as totalSalaryPerDept,
+        d.department_id,
+        d.department_name
+FROM departments AS d INNER JOIN employees AS e
+ON d.department_id = e.department_id
+GROUP BY d.department_id;
+-- returned 11 rows
  
 
 -- Exercise06: Determine the average of the max salary inside of the jobs table. Round to two decimal places.
+
+SELECT FORMAT(AVG(max_salary),2) as 'Avg Max Salary'
+FROM jobs;
+-- returns 1 row with 2 decimals places in result
+
 
 
 
